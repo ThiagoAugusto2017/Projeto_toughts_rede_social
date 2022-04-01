@@ -8,6 +8,10 @@ const app = express(); // iniciamos o express
 
 const conn = require('./db/conn') // puxamos os dados da configuração do banco de dados
 
+//* models - config
+const Tought = require('./models/tought')
+const User = require('./models/user')
+
 
 //* templete engine
 app.engine('handlesbars', exphbs.engine())

@@ -2,7 +2,7 @@ const {
     Sequelize
 } = require('sequelize'); // puxamos a importação  do banco de dados
 
-const sequelize = new Sequelize("toughts", "root", '', { // criação  do banco de dados
+const sequelize = new Sequelize("tought", "root", '', { // criação  do banco de dados
     host: "localhost",
     dialect: "mysql"
 })
@@ -16,4 +16,3 @@ try { // autencirção de coneção caso tenha erro pegamos no catch
 }
 
 module.exports = sequelize
-
