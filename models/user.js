@@ -21,6 +21,7 @@ const User = db.define('User', {
 
 
 
+
 module.exports = User;
 
 // Este e um banco de dados para login de usuario, todos os banco de dados precisa de um models
