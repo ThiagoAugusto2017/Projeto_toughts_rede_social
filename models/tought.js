@@ -5,7 +5,7 @@ const db = require('../db/conn') // conexao com o banco de dados
 
 
 //* puxar o usuario
-const User = require('../models/User')
+const User = require('./User')
 
 
 // Tought => Nome de banco de dados

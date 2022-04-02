@@ -10,12 +10,7 @@ const conn = require('./db/conn') // puxamos os dados da configuração do banco
 
 //* models - config
 const Tought = require('./models/tought')
-const User = require('./models/user')
-
-
-//* templete engine
-app.engine('handlesbars', exphbs.engine())
-app.set('view engine', 'handlebars')
+const User = require('./models/User')
 
 
 //*receber resposta do body
@@ -23,6 +18,13 @@ app.use(express.urlencoded({
     extended: true
 }))
 app.use(express.json())
+
+
+//* templete engine
+app.engine('handlebars', exphbs.engine())
+app.set('view engine', 'handlebars')
+
+
 
 
 //*sesion middleware
@@ -57,6 +59,18 @@ app.use((req, res, next) => { // criamos a session
     }
     next()
 })
+//* Import Controllers
+const ToughtController = require('./controller/ToughtController')
+
+//* Import Routes
+//aqui importamos todos os dados da pagina
+const tougthsRoutes = require('./routes/toughtsRoutes')
+const authRoutes = require('./routes/authRoutes')
+
+//*Routes
+app.use('/tougths', tougthsRoutes) // rotas e
+app.use('/', authRoutes) // rotas e
+app.get('/', ToughtController.showtoughts) // puxamos tudo que esta na controller
 
 
 //*conexao com a localhost
