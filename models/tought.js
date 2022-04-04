@@ -19,8 +19,8 @@ const Tought = db.define('Tought', {
 })
 //* relacionamento das tabelas
 // relacionamento de tabelas
-Tought.belongsTo(User); //aqui dizemos  que um pensamento pertence a um usuario
-User.hasMany(Tought) //aqui dizemos que uma pessoa tem varios pensamento
+Tought.belongsTo(User); //aqui dizemos  que um pensamento pertence a um usuario// 1 para 1
+User.hasMany(Tought) //aqui dizemos que uma pessoa tem varios pensamento //1 para muitos
 
 
 module.exports = Tought // expostamos a configuração

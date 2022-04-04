@@ -73,10 +73,20 @@ app.use('/', authRoutes) // rotas e
 app.get('/', ToughtController.showtoughts) // puxamos tudo que esta na controller
 
 
-//*conexao com a localhost
+// //*conexao com a localhost
 conn.sync().then(() => { // aqui estamos fazendo a ligação do express com o localhost
         app.listen(3000);
     })
     .catch((err) => {
         console.log(err);
     });
+
+// //reset das tabelas no banco de dados
+// conn
+//     .sync({
+//         force: true
+//     })
+//     .then(() => {
+//         app.listen(3000);
+//     })
+//     .catch((err) => console.log(err));

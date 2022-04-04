@@ -9,6 +9,26 @@ module.exports = class AuthController {
         res.render('auth/login')
     }
 
+    static async loginpost(req, res, next) {
+        const {
+            email,
+            senha
+        } = req.body
+
+        // se o usuario esta cadastrado
+        const validador_email = await User.findOne({
+            where: {
+                email: email
+            }
+        })
+        if (!validador_email) {
+            req.flash('messages', "O E-mail não esta cadastrado");
+            res.render('auth/login')
+        }
+        // se a senha esta correta
+
+    }
+
     static register(req, res, next) {
         res.render('auth/register')
     }
@@ -27,6 +47,7 @@ module.exports = class AuthController {
         if (regex_senha.test(senha) == false) { // se a senha tem mais de 6 e menos de 20 caratceres
             req.flash('message', 'Sua senha deve conter de 6 a 20 caracteres')
             res.render('auth/register')
+            return
         };
 
         const salt = bcrypt.genSaltSync(10) //Criptografia senha
@@ -35,12 +56,14 @@ module.exports = class AuthController {
         if (senha !== confirmSenha) { // se as senhas sao identicas
             req.flash('message', 'As senha nao sao identicas, favor conferir e tentar novamente.');
             res.render('auth/register')
+            return
 
         };
         name.split(' ')
         if (name.length <= 1) { // conferimos se o usuario digita mais de um nome
             req.flash('message', 'Favor digitar o nome completo')
             res.render('auth/register')
+            return
         };
 
         const chek_email = await User.findOne({ // validamos se o email nao esta cadastrado
@@ -51,25 +74,43 @@ module.exports = class AuthController {
         if (chek_email) {
             req.flash('message', 'O e-mail ja esta cadastrado')
             res.render('auth/register')
+            return
         };
 
         const regexp = /\S+@\w+\.\w{2,6}(\.\w{2})?/g
-        if (regexp.test(email) == false) {
+        if ((regexp.test(email)) != true) {
             req.flash('message', 'O seu email nao esta no formato correto')
             res.render('auth/register')
+            return
         };
 
-        const user = { // montamos os dados que sera enviado para o banco de dados
+        const Dados_cadastro = { // montamos os dados que sera enviado para o banco de dados
             name,
             email,
             senha: dificult_senha
         }
 
         try { // rastreador de erros
-            await User.create(user) // criação de dados no banco de dados
+            const createdUser = await User.create(Dados_cadastro) // criação de dados no banco de dados
+
+            //* inicializar session
+            req.session.userid = createdUser.id
+
+            req.flash('message', "Cadastro realizado com sucesso!")
+
+            req.session.save(() => { //salvamos os dados da session antes de redirect
+                res.redirect('/')
+            })
+
         } catch (err) {
             console.error('err# % d ', err)
         }
     }
 
+    //* Função de logout
+    static logout(req, res, next) {
+
+        req.session.destroy() // apagamos a ssesion dele dentro do navegador.
+        res.redirect('/login')
+    }
 }
