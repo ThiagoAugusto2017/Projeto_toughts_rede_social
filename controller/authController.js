@@ -16,23 +16,45 @@ module.exports = class AuthController {
         } = req.body
 
         // se o usuario esta cadastrado
-        const validador_email = await User.findOne({
+        //validador_banco => aqui retorna um Json do banco
+        const validador_banco = await User.findOne({
             where: {
                 email: email
             }
         })
-        if (!validador_email) {
-            req.flash('messages', "O E-mail não esta cadastrado");
-            res.render('auth/login')
-        }
-        // se a senha esta correta
 
+        //conferindo se o email esta cadastrado
+        if (!validador_banco) {
+            req.flash('messages', 'O E-mail não esta cadastrado');
+            res.render('auth/login')
+            return
+        }
+
+        // se a senha esta correta
+        const senha_verifica = bcrypt.compareSync(senha, validador_banco.senha)
+
+        if (!senha_verifica) {
+            req.flash('messages', 'A senha esta incorreta');
+            res.render('auth/login')
+            return
+        }
+
+
+        //* inicializar session login
+        req.session.userid = validador_banco.id
+
+        req.flash('message', "login realizado com sucesso!")
+
+        req.session.save(() => { //salvamos os dados da session antes de redirect
+            res.redirect('/')
+        })
     }
 
     static register(req, res, next) {
         res.render('auth/register')
     }
 
+    //* Verificação de cadastro
     static async registerpost(req, res, next) {
 
         const {
