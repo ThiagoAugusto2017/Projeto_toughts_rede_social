@@ -46,7 +46,7 @@ module.exports = class AuthController {
         req.flash('message', "login realizado com sucesso!")
 
         req.session.save(() => { //salvamos os dados da session antes de redirect
-            res.redirect('/')
+            res.redirect('toughts/dashboard')
         })
     }
 

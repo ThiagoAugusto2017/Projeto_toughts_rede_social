@@ -64,11 +64,11 @@ const ToughtController = require('./controller/ToughtController')
 
 //* Import Routes
 //aqui importamos todos os dados da pagina
-const tougthsRoutes = require('./routes/toughtsRoutes')
+const toughtsRoutes = require('./routes/toughtsRoutes')
 const authRoutes = require('./routes/authRoutes')
 
 //*Routes
-app.use('/tougths', tougthsRoutes) // rotas e
+app.use('/toughts', toughtsRoutes) // rotas e
 app.use('/', authRoutes) // rotas e
 app.get('/', ToughtController.showtoughts) // puxamos tudo que esta na controller
 
